@@ -37,7 +37,7 @@ make-thread = (thread) ->
   pos = get-random-pos!
   console.log thread.target.name, pos
 
-  group = new fabric.group [] {
+  group = new fabric.Group [] {
     left: pos.x
     top: pos.y
     width: 150
