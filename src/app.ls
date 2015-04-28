@@ -46,7 +46,7 @@ make-thread = (thread) ->
     origin-y: \center
   }
 
-  text = new fabric.Text thread.target.name {
+  text = new fabric.Text thread.target.name, {
     left: 0
     top: 20
     font-size: 14
@@ -61,7 +61,7 @@ make-thread = (thread) ->
       | thread.message_count < 2 => \mensagem
       | otherwise                => \mensagens
 
-  counter = new fabric.Text text-counter {
+  counter = new fabric.Text text-counter, {
     left: 0
     top: 40
     font-size: 14
