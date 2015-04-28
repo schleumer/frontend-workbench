@@ -1,0 +1,19 @@
+{
+  "name": "workbench",
+  "version": "0.0.0",
+  "authors": [
+    "Wesley Schleumer <wesley.schleumer@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "dist/components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "fabric": "~1.5.0"
+  }
+}
