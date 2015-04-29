@@ -1,12 +1,15 @@
 { fabric } = require \fabric
 { each } = require \prelude-ls
 
-threads = require "./test.json"
+Lazy = require \lazy.js
+
+threads = Lazy(require "./test.json").shuffle!value!
+
+console.log(threads)
+
 require! \numeral
 
 export numeral = numeral
-
-
 
 canvas-el = document.get-element-by-id \the-canvas
 
@@ -15,6 +18,7 @@ export the-f-canvas = new fabric.Canvas canvas-el, {
   height: 500  
 }
 
+hardcoded-positions = [{"x":439.12416851441236,"y":133.7250996015936},{"x":289.1773835920177,"y":88.90438247011954},{"x":196.079822616408,"y":187.78486055776898},{"x":291.90687361419066,"y":430.59760956175296},{"x":449.3259423503326,"y":430.9003984063745},{"x":635.9401330376936,"y":306.85657370517936},{"x":596.90022172949,"y":425.81673306772893},{"x":245.47671840354758,"y":307.0119521912351},{"x":661.8824833702882,"y":191.10756972111565},{"x":584.361419068736,"y":84.64541832669326}]
 canvas = the-f-canvas
 
 c = canvas.get-element!
@@ -27,7 +31,8 @@ if window.device-pixel-ratio
 
   c.get-context \2d .scale window.device-pixel-ratio, window.device-pixel-ratio
 
-random-int = (min, max) --> Math.floor Math.random! * (max - min + 1) + min
+random-int = (min, max, step = 1) ->
+  (Math.floor(Math.random! * ((max - min + 1) / step)) * step) + min
 
 get-random-pos = ->
   boundaries =
@@ -43,9 +48,8 @@ get-random-pos = ->
   x: random-int boundaries.min-x, boundaries.max-x
   y: random-int boundaries.min-y, boundaries.max-y
 
-make-thread = (thread) ->
-  pos = get-random-pos!
-  console.log thread.target.name, pos
+make-thread = (thread, index) ->
+  pos = hardcoded-positions[index]
 
   group = new fabric.Group [] {
     left: pos.x
@@ -116,7 +120,7 @@ make-thread = (thread) ->
 test = (x) ->
   console.log(x)
 
-threads-group = [ make-thread thread for thread in threads ]
+threads-group = [ make-thread thread, k for thread, k in threads ]
 
 [ canvas.add obj for obj in threads-group ]
 
@@ -133,3 +137,8 @@ collision-check = ->
         width     = obj.width
         height    = obj.height
         # working
+
+
+canvas.on 'object:moving', (ev) ->
+  console.log(ev.target.left, ev.target.top)
+  console.log(JSON.stringify(threads-group.map((x) -> {x: x.left, y: x.top})))
